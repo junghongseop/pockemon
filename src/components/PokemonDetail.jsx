@@ -1,12 +1,12 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const PokemonDetail = () => {
   const { id } = useParams();
-  const navigate = useNavigate(); // Use useNavigate hook for navigation
+  const navigate = useNavigate();
   const [pokemon, setPokemon] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -58,7 +58,7 @@ const PokemonDetail = () => {
 
         setPokemon({
           ...response.data,
-          korean_name: koreanName.name,
+          korean_name: koreanName ? koreanName.name : response.data.name,
           abilities,
           moves,
           types,
@@ -94,6 +94,8 @@ const PokemonDetail = () => {
       <PokemonImage
         src={pokemon.sprites.front_default}
         alt={pokemon.korean_name}
+        isCharizard={pokemon.korean_name === "리자몽"}
+        isPiCaChu ={pokemon.korean_name === "피카츄"}
       />
       <Container>
         몸무게: {pokemon.height}, 키: {pokemon.weight}
@@ -149,6 +151,13 @@ const PokemonDetailStyle = styled.div`
 const PokemonImage = styled.img`
   width: 300px;
   height: 300px;
+
+  &:hover {
+    content: ${(props) =>
+      props.isCharizard
+        ? "url('https://lh4.googleusercontent.com/proxy/dtyOg7OigDsClnjyFWWqZYzNIKtuX9X3BucsWrFwAJu9VXDjxios4I5FMFBgcRqIVbv5J0FDl-mL6w2e3ztI_UtXsq-Dg3lrXZvbhj-pDH2LOecJ_nKEb3UJdC4gApiDXJS3GsT2k_5TfQOBCfXIHGwqqKlD6TOmJbNfU0LuknfTzGs4Pls')"
+        : "none"};
+  }
 `;
 
 const TextBox = styled.div`
@@ -173,7 +182,7 @@ const BallStyle = styled.img`
   transition: all 0.3s ease;
 
   &:hover {
-    content: url('https://i.namu.wiki/i/bTca2nNtVRjrLf08CrKv8fvVluVKWOjv-V3xyFEtvkKDs_yEP0h5nnjr_OYDax80NhKM8kriNO73DU6YDgRHMA.webp');
+    content: url("https://i.namu.wiki/i/bTca2nNtVRjrLf08CrKv8fvVluVKWOjv-V3xyFEtvkKDs_yEP0h5nnjr_OYDax80NhKM8kriNO73DU6YDgRHMA.webp");
     transform: scale(1.1);
   }
 `;
@@ -194,4 +203,3 @@ const BackButton = styled.button`
     background-color: #f5f5f5;
   }
 `;
-
